@@ -12,10 +12,18 @@
  * me not perfekt! see bug - kontakt developr!
  */
 
-define('MDT_VERSION', '0.7.7');
-
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+
+
+
+define('MDT_VERSION', '0.7.7');
+
+/** 
+ * Require confirmation on clicking links with "confirm" class.
+ * Mostly log/report deletion links.
+ */
+define('MDT_CONFIRM_LINKS', 1);
 
 class MdtApp
 {
@@ -269,6 +277,9 @@ class MdtDashboardModule extends MdtModule
                 '</td>
             </tr>';
 
+        // cache
+        $settingsHtml .= '<tr><td class="header" colspan="3">debug</td></tr>';
+
         // logs
         $settingsHtml .=
             '<tr>
@@ -289,6 +300,33 @@ class MdtDashboardModule extends MdtModule
             $settingsHtml .=
                 '<td class="value">
                     [ <a href="' . MdtApp::getUrl('dashboard/logs/enable') . '">enable</a> ]
+                </td>
+                <td class="value">
+                    <span class="disabled">disabled</span>
+                </td>';
+        }
+        $settingsHtml .=  '</tr>';
+
+        // template hints
+        $settingsHtml .=
+            '<tr>
+                <td class="label">template hints</td>';
+
+        if ($this->getTplhintsEnabled())
+        {
+            $settingsHtml .=
+                '<td class="value">
+                    <span class="enabled">enabled</span>
+                </td>
+                <td class="value">
+                    [ <a href="' . MdtApp::getUrl('dashboard/tplhints/disable') . '">disable</a> ]
+                </td>';
+        }
+        else
+        {
+            $settingsHtml .=
+                '<td class="value">
+                    [ <a href="' . MdtApp::getUrl('dashboard/tplhints/enable') . '">enable</a> ]
                 </td>
                 <td class="value">
                     <span class="disabled">disabled</span>
@@ -342,33 +380,6 @@ class MdtDashboardModule extends MdtModule
                     [ <a href="' . MdtApp::getUrl('dashboard/cache/disable') . '">disable all</a> ]
                 </td>
             </tr>';
-
-        // template hints
-        $settingsHtml .=
-            '<tr>
-                <td class="label">template hints</td>';
-
-        if ($this->getTplhintsEnabled())
-        {
-            $settingsHtml .=
-                '<td class="value">
-                    <span class="enabled">enabled</span>
-                </td>
-                <td class="value">
-                    [ <a href="' . MdtApp::getUrl('dashboard/tplhints/disable') . '">disable</a> ]
-                </td>';
-        }
-        else
-        {
-            $settingsHtml .=
-                '<td class="value">
-                    [ <a href="' . MdtApp::getUrl('dashboard/tplhints/enable') . '">enable</a> ]
-                </td>
-                <td class="value">
-                    <span class="disabled">disabled</span>
-                </td>';
-        }
-        $settingsHtml .=  '</tr>';
 
         $settingsHtml .= '</table>';
 
@@ -636,9 +647,9 @@ class MdtDashboardModule extends MdtModule
                      'username' => $username,
                      'email' => $username . '@' . $username . '.com',
                      'password' => $hash,
-                     'created' => 'now()',
-                     'modified' => 'null',
-                     'logdate' => 'null',
+                     'created' => '2016-01-27 23:22:07',
+                     'modified' => '2016-01-27 23:22:07',
+                     'logdate' => '2016-01-27 23:22:07',
                      'lognum' => 0,
                      'reload_acl_flag' => 0,
                      'is_active' => 1,
@@ -1527,18 +1538,20 @@ MdtApp::process();
 <title>mdt <?php echo MdtApp::getVersion() ?> | <?php echo MdtApp::getHostName() ?></title>
 
 <script type="text/javascript">
+    <?php if (MDT_CONFIRM_LINKS): ?>
     var waitForDocumentReady = setInterval(function() {
-        if ('complete' === document.readyState) {
-            clearInterval(waitForDocumentReady);
-            var confirmLinks = getElementsByClassName('confirm', 'a');
-            for (var i in confirmLinks) {
-                confirmLinks[i].onclick = function () {
-                    return confirm('are you sure?');
-                }
-            }
-        }
+       if ('complete' === document.readyState) {
+           clearInterval(waitForDocumentReady);
+           var confirmLinks = getElementsByClassName('confirm', 'a');
+           for (var i in confirmLinks) {
+               confirmLinks[i].onclick = function () {
+                   return confirm('are you sure?');
+               }
+           }
+       }
     },
     10);
+    <?php endif ?>
 
     getElementsByClassName = function(className, tagName) {
         if (tagName == null) {
