@@ -12,6 +12,8 @@
  * me not perfekt! see bug - kontakt developr!
  */
 
+define('MDT_VERSION', '0.7.7');
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -36,7 +38,7 @@ class MdtApp
 
     public static function getVersion()
     {
-        return '076';
+        return MDT_VERSION;
     }
 
     // processing
@@ -671,23 +673,27 @@ class MdtDashboardModule extends MdtModule
 
     protected function addcustomerAction()
     {
-        $websiteId = Mage::app()->getWebsite()->getId();
-        $store = Mage::app()->getStore();
+        MdtApp::warning('adding customer not implemented yet');
 
-        $customer = Mage::getModel("customer/customer");
-        $customer   ->setWebsiteId($websiteId)
-            ->setStore($store)
-            ->setFirstname('John')
-            ->setLastname('Doe')
-            ->setEmail('jd1@ex.com')
-            ->setPassword('somepassword');
+        return $this->displayAction();
 
-        try{
-            $customer->save();
-        }
-        catch (Exception $e) {
-            Zend_Debug::dump($e->getMessage());
-        }
+        // $websiteId = Mage::app()->getWebsite()->getId();
+        // $store = Mage::app()->getStore();
+
+        // $customer = Mage::getModel("customer/customer");
+        // $customer->setWebsiteId($websiteId)
+        //     ->setStore($store)
+        //     ->setFirstname('John')
+        //     ->setLastname('Doe')
+        //     ->setEmail('jd1@ex.com')
+        //     ->setPassword('somepassword');
+
+        // try{
+        //     $customer->save();
+        // }
+        // catch (Exception $e) {
+        //     Zend_Debug::dump($e->getMessage());
+        // }
     }
 
     protected function selfdestructAction()
