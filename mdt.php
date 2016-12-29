@@ -23,7 +23,7 @@ define('MDT_VERSION', '0.7.7');
  * Require confirmation on clicking links with "confirm" class.
  * Mostly log/report deletion links.
  */
-define('MDT_CONFIRM_LINKS', 1);
+define('MDT_CONFIRM_LINKS', 0);
 
 class MdtApp
 {
